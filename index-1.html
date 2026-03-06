@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AutoPost — AI Social Media Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f6f3;
+  --white:#ffffff;
+  --dark:#0f0e0c;
+  --darker:#070706;
+  --accent:#ff4d00;
+  --accent2:#ff7a40;
+  --border:#e8e4de;
+  --muted:#9a9488;
+  --sub:#6a6460;
+  --card:#ffffff;
+  --green:#16a34a;
+  --blue:#2563eb;
+  --x:#000000;
+  --fb:#1877f2;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--dark);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ── SCREENS ── */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ── NAV ── */
+nav{
+  background:rgba(247,246,243,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;
+  height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:18px;
+  font-weight:800;
+  color:var(--dark);
+  letter-spacing:-0.5px;
+}
+.nav-logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-plan{
+  background:var(--accent);
+  color:#fff;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:4px 12px;
+  border-radius:100px;
+}
+.nav-menu-btn{
+  background:none;border:none;
+  font-size:20px;cursor:pointer;
+  padding:4px;color:var(--dark);
+  display:none;
+}
+@media(max-width:600px){.nav-menu-btn{display:block}}
+
+/* ── LANDING ── */
+#landing{min-height:100vh}
+.hero{
+  padding:80px 20px 60px;
+  max-width:900px;
+  margin:0 auto;
+  text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--dark);color:#fff;
+  border-radius:100px;padding:6px 16px;
+  font-size:12px;font-weight:500;
+  margin-bottom:24px;
+  animation:fadeUp .5s ease both;
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(36px,8vw,72px);
+  font-weight:800;
+  line-height:1.0;
+  letter-spacing:-2px;
+  color:var(--dark);
+  margin-bottom:12px;
+  animation:fadeUp .5s .1s ease both;
+}
+.hero h1 span{color:var(--accent)}
+.hero-sub{
+  font-size:clamp(15px,2.5vw,18px);
+  color:var(--sub);
+  max-width:520px;
+  margin:0 auto 36px;
+  line-height:1.7;
+  animation:fadeUp .5s .2s ease both;
+}
+.hero-actions{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:56px;
+  animation:fadeUp .5s .3s ease both;
+}
+.btn-accent{
+  background:var(--accent);color:#fff;border:none;
+  border-radius:100px;padding:14px 28px;
+  font-size:14px;font-weight:600;font-family:'Inter',sans-serif;
+  cursor:pointer;transition:opacity .2s,transform .2s;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-accent:hover{opacity:0.88;transform:translateY(-2px)}
+.btn-outline{
+  background:transparent;color:var(--dark);
+  border:1.5px solid var(--border);
+  border-radius:100px;padding:13px 28px;
+  font-size:14px;font-weight:500;font-family:'Inter',sans-serif;
+  cursor:pointer;transition:border-color .2s,transform .2s;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-outline:hover{border-color:var(--dark);transform:translateY(-2px)}
+
+/* Feature pills */
+.feature-pills{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  animation:fadeUp .5s .4s ease both;
+  margin-bottom:60px;
+}
+.pill{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:100px;padding:8px 16px;
+  font-size:12px;color:var(--sub);
+  display:flex;align-items:center;gap:6px;
+}
+.pill-icon{font-size:14px}
+
+/* How it works */
+.how-section{
+  background:var(--dark);
+  padding:60px 20px;
+  text-align:center;
+}
+.how-section h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(24px,5vw,36px);
+  font-weight:800;
+  color:#fff;
+  letter-spacing:-1px;
+  margin-bottom:8px;
+}
+.how-section p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:40px}
+.steps-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+  max-width:860px;
+  margin:0 auto;
+}
+.step{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  padding:24px 20px;
+  text-align:left;
+}
+.step-num{
+  font-family:'Syne',sans-serif;
+  font-size:36px;
+  font-weight:800;
+  color:var(--accent);
+  line-height:1;
+  margin-bottom:12px;
+}
+.step-title{
+  font-family:'Syne',sans-serif;
+  font-size:16px;font-weight:700;
+  color:#fff;margin-bottom:8px;
+}
+.step-desc{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6}
+
+/* Pricing section */
+.pricing-section{padding:60px 20px;text-align:center}
+.pricing-section h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(24px,5vw,36px);
+  font-weight:800;letter-spacing:-1px;
+  margin-bottom:8px;
+}
+.pricing-section p{color:var(--sub);font-size:14px;margin-bottom:40px}
+.pricing-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  max-width:860px;
+  margin:0 auto;
+}
+.price-card.pro{border-color:#7c3aed;background:linear-gradient(135deg,#1a0533,#0f0e0c);color:#fff}
+.price-card.pro .price-name{color:#c4b5fd}
+.price-card.pro .price-amount{color:#fff}
+.price-card.pro .price-period{color:rgba(255,255,255,0.5)}
+.price-card.pro .price-features li{border-color:rgba(124,58,237,0.2);color:rgba(255,255,255,0.7)}
+.price-card.pro .check{color:#a78bfa}
+.price-card.pro .price-trial{color:rgba(255,255,255,0.4)}
+.price-card.pro .price-badge{background:#7c3aed}
+.image-slot{display:flex;align-items:center;gap:8px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.25);border-radius:8px;padding:8px 10px;font-size:12px;color:#c4b5fd;margin-bottom:8px;font-weight:500}
+.price-card{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:20px;
+  padding:28px 24px;
+  text-align:left;
+  transition:transform .2s,box-shadow .2s;
+  position:relative;
+}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.08)}
+.price-card.featured{border-color:var(--accent);background:var(--dark);color:#fff}
+.price-card.pro{border-color:#7c3aed!important;background:linear-gradient(135deg,#1a0533,#0f0e0c)!important;color:#fff!important}
+.price-card.pro .price-name{color:#c4b5fd!important}
+.price-card.pro .price-amount{color:#fff!important}
+.price-card.pro .price-period{color:rgba(255,255,255,0.5)!important}
+.price-card.pro .price-features li{border-color:rgba(124,58,237,0.2)!important;color:rgba(255,255,255,0.7)!important}
+.price-card.pro .check{color:#a78bfa!important}
+.price-card.pro .price-trial{color:rgba(255,255,255,0.4)!important}
+.price-card.pro .price-badge{background:#7c3aed!important}
+.price-card.agency{border-color:#0ea5e9!important;background:linear-gradient(135deg,#001a2e,#0f0e0c)!important;color:#fff!important}
+.price-card.agency .price-name{color:#7dd3fc!important}
+.price-card.agency .price-amount{color:#fff!important}
+.price-card.agency .price-period{color:rgba(255,255,255,0.5)!important}
+.price-card.agency .price-features li{border-color:rgba(14,165,233,0.2)!important;color:rgba(255,255,255,0.7)!important}
+.price-card.agency .check{color:#38bdf8!important}
+.price-card.agency .price-trial{color:rgba(255,255,255,0.4)!important}
+.price-card.agency .price-badge{background:linear-gradient(135deg,#0ea5e9,#0284c7)!important}
+/* Agency client cards */
+.client-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;transition:box-shadow .2s}
+.client-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.07)}
+.client-card.active-card{border-color:#0ea5e9}
+.client-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.client-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.client-status{font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.5px}
+.client-status.running{background:rgba(22,163,74,0.1);color:var(--green)}
+.client-status.paused{background:rgba(154,148,136,0.15);color:var(--muted)}
+.client-status.idle{background:rgba(255,77,0,0.1);color:var(--accent)}
+.client-platforms{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.client-platform-tag{font-size:11px;padding:3px 10px;border-radius:100px;border:1px solid var(--border);color:var(--sub);display:flex;align-items:center;gap:4px}
+.client-platform-tag.connected-x{border-color:#000;color:#000;background:rgba(0,0,0,0.04)}
+.client-platform-tag.connected-fb{border-color:#1877f2;color:#1877f2;background:rgba(24,119,242,0.04)}
+.client-niche-label{font-size:11px;color:var(--muted);margin-bottom:8px}
+.client-actions{display:flex;gap:8px;flex-wrap:wrap}
+.client-btn{border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .2s}
+.client-btn-run{background:var(--dark);color:#fff}
+.client-btn-pause{background:var(--bg);color:var(--sub);border:1px solid var(--border)}
+.client-btn-edit{background:var(--bg);color:var(--sub);border:1px solid var(--border)}
+.client-btn-delete{background:rgba(220,38,38,0.08);color:#dc2626;border:1px solid rgba(220,38,38,0.15)}
+.client-btn:hover{opacity:0.8}
+.add-client-btn{width:100%;border:2px dashed var(--border);background:transparent;border-radius:14px;padding:18px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.add-client-btn:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,0.04)}
+.agency-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.agency-stat{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.agency-stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--dark)}
+.agency-stat-label{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.5px}
+/* Calendar */
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cal-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700}
+.cal-nav-btn{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px}
+.cal-day-label{font-size:10px;color:var(--muted);text-align:center;font-weight:600;letter-spacing:0.5px;padding:4px 0}
+.cal-day{min-height:40px;border-radius:8px;padding:4px;font-size:11px;background:var(--bg);border:1px solid var(--border);position:relative;cursor:pointer;transition:border-color .2s}
+.cal-day:hover{border-color:#0ea5e9}
+.cal-day.today{border-color:#0ea5e9;background:rgba(14,165,233,0.06)}
+.cal-day.empty{background:transparent;border-color:transparent}
+.cal-day-num{font-size:11px;font-weight:600;color:var(--sub);margin-bottom:2px}
+.cal-day.today .cal-day-num{color:#0ea5e9}
+.cal-post-dot{width:100%;background:var(--dark);color:#fff;border-radius:4px;padding:1px 3px;font-size:8px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-post-dot.dot-x{background:#000}
+.cal-post-dot.dot-fb{background:#1877f2}
+.cal-legend{display:flex;gap:12px;flex-wrap:wrap}
+.cal-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--sub)}
+.cal-legend-dot{width:10px;height:10px;border-radius:3px}
+.cal-detail-panel{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:12px;display:none}
+.cal-detail-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px}
+.cal-detail-item{padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.cal-detail-item:last-child{border:none}
+.cal-detail-meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:10px}
+/* Client filter */
+.client-filter{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;-webkit-overflow-scrolling:touch}
+.client-filter::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;background:var(--bg);border:1.5px solid var(--border);border-radius:100px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .2s;white-space:nowrap}
+.filter-chip.active{border-color:#0ea5e9;background:rgba(14,165,233,0.08);color:#0ea5e9}
+/* Reports */
+.report-client-select{width:100%;margin-bottom:16px}
+.report-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.report-card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.report-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.report-metric{background:var(--bg);border-radius:10px;padding:12px;text-align:center}
+.report-metric-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--dark)}
+.report-metric-label{font-size:10px;color:var(--muted);margin-top:2px}
+.report-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.report-bar-label{font-size:12px;color:var(--sub);width:80px;flex-shrink:0}
+.report-bar-track{flex:1;background:var(--bg);border-radius:100px;height:8px;overflow:hidden}
+.report-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#0ea5e9,#38bdf8)}
+.report-bar-val{font-size:11px;font-weight:700;color:var(--dark);width:32px;text-align:right;flex-shrink:0}
+.report-post-list{max-height:200px;overflow-y:auto}
+.report-post-item{padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--sub);line-height:1.5}
+.report-post-item:last-child{border:none}
+.report-post-time{font-size:10px;color:var(--muted);margin-top:2px}
+.download-btn{width:100%;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s}
+.download-btn:hover{opacity:0.88}
+.price-card.featured{border-color:var(--accent);background:var(--dark);color:#fff}
+.price-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 14px;border-radius:100px;white-space:nowrap;
+}
+.price-name{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:700;
+  margin-bottom:4px;
+}
+.price-card.featured .price-name{color:#fff}
+.price-amount{
+  font-family:'Syne',sans-serif;
+  font-size:36px;font-weight:800;
+  letter-spacing:-1px;
+  margin-bottom:4px;
+  color:var(--dark);
+}
+.price-card.featured .price-amount{color:#fff}
+.price-period{font-size:12px;color:var(--muted);margin-bottom:20px}
+.price-card.featured .price-period{color:rgba(255,255,255,0.5)}
+.price-features{list-style:none;margin-bottom:24px}
+.price-features li{
+  font-size:13px;padding:6px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+  color:var(--sub);
+}
+.price-card.featured .price-features li{border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
+.price-features li:last-child{border:none}
+.check{color:var(--green);font-size:14px}
+.price-card.featured .check{color:#4ade80}
+.price-trial{
+  font-size:11px;text-align:center;
+  color:var(--muted);margin-top:10px;
+}
+.price-card.featured .price-trial{color:rgba(255,255,255,0.4)}
+
+/* ── AUTH SCREENS ── */
+.auth-wrap{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 20px 40px;
+}
+.auth-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:32px 28px;
+  width:100%;max-width:400px;
+}
+.auth-title{
+  font-family:'Syne',sans-serif;
+  font-size:24px;font-weight:800;
+  letter-spacing:-0.5px;
+  margin-bottom:6px;
+}
+.auth-sub{font-size:13px;color:var(--sub);margin-bottom:24px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;font-weight:600;color:var(--sub);margin-bottom:6px;display:block;letter-spacing:0.3px}
+.form-input{
+  width:100%;background:var(--bg);
+  border:1.5px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+  font-size:14px;font-family:'Inter',sans-serif;
+  color:var(--dark);outline:none;
+  transition:border-color .2s;
+}
+.form-input:focus{border-color:var(--accent)}
+.form-select{
+  width:100%;background:var(--bg);
+  border:1.5px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+  font-size:14px;font-family:'Inter',sans-serif;
+  color:var(--dark);outline:none;
+  -webkit-appearance:none;
+}
+.btn-full{width:100%;justify-content:center;border-radius:12px;padding:14px}
+.auth-switch{
+  text-align:center;font-size:13px;
+  color:var(--sub);margin-top:16px;
+}
+.auth-switch a{color:var(--accent);font-weight:600;text-decoration:none}
+.plan-selector{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;
+}
+.plan-opt{
+  border:1.5px solid var(--border);
+  border-radius:12px;padding:14px 12px;
+  cursor:pointer;transition:all .2s;text-align:center;
+}
+.plan-opt.selected{border-color:var(--accent);background:rgba(255,77,0,0.04)}
+.plan-opt-name{font-size:13px;font-weight:700;margin-bottom:4px}
+.plan-opt-price{font-size:18px;font-weight:800;font-family:'Syne',sans-serif;color:var(--accent)}
+.plan-opt-limit{font-size:11px;color:var(--muted);margin-top:2px}
+.trial-note{
+  background:rgba(22,163,74,0.08);
+  border:1px solid rgba(22,163,74,0.2);
+  border-radius:10px;padding:10px 14px;
+  font-size:12px;color:var(--green);
+  text-align:center;margin-bottom:14px;
+  font-weight:500;
+}
+
+/* ── DASHBOARD ── */
+#dashboard{padding-bottom:80px}
+.dash-header{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:16px 20px;
+}
+.dash-welcome{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:700;
+  letter-spacing:-0.3px;
+}
+.dash-plan-info{
+  font-size:12px;color:var(--sub);margin-top:2px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.dash-trial-badge{
+  background:rgba(255,77,0,0.1);
+  color:var(--accent);
+  font-size:10px;font-weight:700;
+  padding:2px 10px;border-radius:100px;
+}
+
+.dash-body{padding:16px 20px;max-width:700px;margin:0 auto}
+
+/* Stats row */
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  margin-bottom:20px;
+}
+.stat-box{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:14px;padding:14px;text-align:center;
+}
+.stat-box-val{
+  font-family:'Syne',sans-serif;
+  font-size:24px;font-weight:800;color:var(--dark);
+}
+.stat-box-label{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.5px}
+
+/* Config card */
+.config-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:16px;padding:20px;margin-bottom:16px;
+}
+.config-title{
+  font-family:'Syne',sans-serif;
+  font-size:15px;font-weight:700;
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.platform-toggles{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.platform-toggle{
+  flex:1;min-width:120px;
+  border:1.5px solid var(--border);border-radius:12px;
+  padding:12px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:10px;
+}
+.platform-toggle.active-x{border-color:var(--x);background:rgba(0,0,0,0.03)}
+.platform-toggle.active-fb{border-color:var(--fb);background:rgba(24,119,242,0.04)}
+.platform-toggle-icon{font-size:20px}
+.platform-toggle-label{font-size:13px;font-weight:600}
+.platform-toggle-status{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* Source tabs */
+.source-tabs{display:flex;gap:8px;margin-bottom:14px}
+.source-tab{
+  flex:1;padding:10px;border-radius:10px;
+  border:1.5px solid var(--border);
+  background:var(--bg);cursor:pointer;
+  font-size:12px;font-weight:600;color:var(--sub);
+  text-align:center;transition:all .2s;
+}
+.source-tab.active{border-color:var(--accent);background:rgba(255,77,0,0.06);color:var(--accent)}
+
+/* Niche input */
+.niche-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.niche-chip{
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:100px;padding:6px 14px;
+  font-size:12px;cursor:pointer;color:var(--sub);
+  transition:all .2s;
+}
+.niche-chip.selected{border-color:var(--accent);background:rgba(255,77,0,0.06);color:var(--accent);font-weight:600}
+
+/* Scheduler */
+.schedule-info{
+  background:var(--bg);border-radius:10px;padding:12px 14px;
+  font-size:13px;color:var(--sub);
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;
+}
+.schedule-val{font-weight:700;color:var(--dark)}
+
+/* Posts remaining */
+.posts-bar-wrap{margin-bottom:6px}
+.posts-bar-label{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--sub);margin-bottom:6px;
+}
+.posts-bar-track{
+  background:var(--bg);border-radius:100px;height:8px;overflow:hidden;
+}
+.posts-bar-fill{
+  height:100%;border-radius:100px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .5s ease;
+}
+
+/* Toggle switch */
+.toggle-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.toggle-row:last-child{border:none;padding-bottom:0}
+.toggle-label{font-size:13px;color:var(--dark);font-weight:500}
+.toggle-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.toggle{
+  position:relative;width:44px;height:24px;flex-shrink:0;
+}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{
+  position:absolute;inset:0;
+  background:var(--border);border-radius:100px;
+  cursor:pointer;transition:background .2s;
+}
+.toggle-slider:before{
+  content:'';position:absolute;
+  width:18px;height:18px;border-radius:50%;
+  background:#fff;left:3px;top:3px;
+  transition:transform .2s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.15);
+}
+.toggle input:checked + .toggle-slider{background:var(--accent)}
+.toggle input:checked + .toggle-slider:before{transform:translateX(20px)}
+
+/* Activity feed */
+.activity-feed{margin-top:4px}
+.activity-item{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.activity-item:last-child{border:none}
+.activity-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.activity-icon.posted{background:rgba(22,163,74,0.1)}
+.activity-icon.pending{background:rgba(255,77,0,0.1)}
+.activity-icon.failed{background:rgba(220,38,38,0.1)}
+.activity-body{flex:1;min-width:0}
+.activity-text{font-size:13px;color:var(--dark);line-height:1.5;margin-bottom:4px}
+.activity-meta{font-size:11px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.activity-status{
+  font-size:10px;font-weight:700;letter-spacing:0.5px;
+  padding:2px 8px;border-radius:100px;
+}
+.status-posted{background:rgba(22,163,74,0.1);color:var(--green)}
+.status-pending{background:rgba(255,77,0,0.1);color:var(--accent)}
+.status-failed{background:rgba(220,38,38,0.1);color:#dc2626}
+
+/* Generate btn */
+.generate-btn{
+  width:100%;background:var(--dark);color:#fff;
+  border:none;border-radius:14px;padding:16px;
+  font-size:15px;font-weight:700;font-family:'Syne',sans-serif;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:opacity .2s,transform .2s;margin-bottom:16px;
+  letter-spacing:0.3px;
+}
+.generate-btn:hover{opacity:0.88;transform:translateY(-1px)}
+.generate-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.generate-btn.running{background:var(--accent)}
+
+/* Upgrade banner */
+.upgrade-banner{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:16px;padding:20px;color:#fff;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;flex-wrap:wrap;margin-bottom:16px;
+}
+.upgrade-banner-text h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
+.upgrade-banner-text p{font-size:12px;opacity:0.8}
+.upgrade-btn{
+  background:#fff;color:var(--accent);
+  border:none;border-radius:100px;padding:8px 18px;
+  font-size:12px;font-weight:700;cursor:pointer;
+  white-space:nowrap;transition:opacity .2s;font-family:'Inter',sans-serif;
+}
+.upgrade-btn:hover{opacity:0.9}
+
+/* Bottom nav (mobile) */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);border-top:1px solid var(--border);
+  display:flex;padding:8px 0 12px;
+  z-index:100;
+}
+.bottom-nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;padding:4px;background:none;border:none;
+  font-family:'Inter',sans-serif;
+  transition:color .2s;
+}
+.bottom-nav-item .bnav-icon{font-size:20px}
+.bottom-nav-item .bnav-label{font-size:10px;color:var(--muted);font-weight:500}
+.bottom-nav-item.active .bnav-label{color:var(--accent)}
+
+/* Overlay loader */
+.loader-overlay{
+  position:fixed;inset:0;
+  background:rgba(247,246,243,0.85);
+  backdrop-filter:blur(4px);
+  z-index:200;
+  display:none;
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:16px;
+}
+.loader-overlay.show{display:flex}
+.loader-spinner{
+  width:40px;height:40px;
+  border:3px solid var(--border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-size:14px;color:var(--sub);font-weight:500}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(10px);
+  background:var(--dark);color:#fff;
+  padding:10px 20px;border-radius:100px;
+  font-size:13px;font-weight:500;
+  opacity:0;transition:all .3s;z-index:300;
+  pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── ACCOUNT SCREEN ── */
+.account-screen{padding:20px;max-width:500px;margin:0 auto}
+.account-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:16px;padding:20px;margin-bottom:14px;
+}
+.account-avatar{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  font-family:'Syne',sans-serif;font-size:24px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:12px;
+}
+.account-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+.account-email{font-size:13px;color:var(--sub);margin-top:2px}
+.account-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;
+}
+.account-row:last-child{border:none}
+.account-row-label{color:var(--sub)}
+.account-row-val{font-weight:600}
+.logout-btn{
+  width:100%;background:none;border:1.5px solid #dc2626;
+  color:#dc2626;border-radius:12px;padding:13px;
+  font-size:14px;font-weight:600;font-family:'Inter',sans-serif;
+  cursor:pointer;transition:background .2s;margin-top:8px;
+}
+.logout-btn:hover{background:rgba(220,38,38,0.06)}
+
+/* Misc */
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+.section-label{
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;font-weight:600;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Auto<span>Post</span></div>
+  <div class="nav-right">
+    <div class="nav-plan" id="nav-plan-badge" style="display:none">FREE TRIAL</div>
+    <button class="nav-menu-btn" onclick="showToast('Menu coming soon')">☰</button>
+  </div>
+</nav>
+
+<!-- LOADER -->
+<div class="loader-overlay" id="loader">
+  <div class="loader-spinner"></div>
+  <div class="loader-text" id="loader-text">Generating content...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════
+     SCREEN: LANDING
+══════════════════════════════ -->
+<div id="landing" class="screen active">
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      AI-Powered Social Media Automation
+    </div>
+    <h1>Post Smarter.<br/><span>Grow Faster.</span></h1>
+    <p class="hero-sub">AutoPost uses AI to generate viral content and automatically posts to your X and Facebook — every 30 minutes, around the clock.</p>
+    <div class="hero-actions">
+      <button class="btn-accent" onclick="showScreen('signup')">🚀 Start Free 7-Day Trial</button>
+      <button class="btn-outline" onclick="document.getElementById('pricing-section').scrollIntoView({behavior:'smooth'})">See Pricing →</button>
+    </div>
+    <div class="feature-pills">
+      <div class="pill"><span class="pill-icon">🤖</span> AI Content Generation</div>
+      <div class="pill"><span class="pill-icon">📱</span> Posts to X & Facebook</div>
+      <div class="pill"><span class="pill-icon">⏰</span> Every 30 Minutes</div>
+      <div class="pill"><span class="pill-icon">🔥</span> Trending Topic Sourcing</div>
+      <div class="pill"><span class="pill-icon">✍️</span> Human-like Rewrites</div>
+      <div class="pill"><span class="pill-icon">📊</span> Post Analytics</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section">
+    <h2>How AutoPost Works</h2>
+    <p>Three steps to fully automated social media growth</p>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Choose Your Source</div>
+        <p class="step-desc">Pick AI-generated trending content or scrape top-performing posts from X and Facebook in your niche.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">AI Rewrites It</div>
+        <p class="step-desc">Our AI paraphrases and rewrites the content so it's 100% unique and sounds completely natural.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Auto-Published</div>
+        <p class="step-desc">Posts go live on your connected X and/or Facebook accounts automatically — every 30 minutes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Track & Grow</div>
+        <p class="step-desc">Monitor your post history, daily limits and engagement all from your mobile dashboard.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="pricing-section" id="pricing-section">
+    <h2>Simple Pricing</h2>
+    <p>7-day free trial on all plans. No credit card required.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Limited</div>
+        <div class="price-amount">₦3,000</div>
+        <div class="price-period">per month</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 5 text posts/day (X & Facebook)</li>
+          <li><span class="check">✓</span> Text post every 30 mins</li>
+          <li><span class="check">✓</span> 2 image posts/day (X, Facebook & Instagram)</li>
+          <li><span class="check">✓</span> 🌅 Morning & 🌇 Evening image posts</li>
+          <li><span class="check">✓</span> AI content generation</li>
+          <li><span class="check">✓</span> Social media scraping</li>
+          <li><span class="check">✓</span> 7-day free trial</li>
+        </ul>
+        <button class="btn-accent btn-full" onclick="selectPlanAndSignup('limited')">Start Free Trial</button>
+        <div class="price-trial">7 days free, then ₦3,000/month</div>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-name">Unlimited</div>
+        <div class="price-amount" style="color:#fff">₦5,000</div>
+        <div class="price-period">per month</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 20 text posts/day (X & Facebook)</li>
+          <li><span class="check">✓</span> Text post every 30 mins</li>
+          <li><span class="check">✓</span> 2 image posts/day (X, Facebook & Instagram)</li>
+          <li><span class="check">✓</span> 🌅 Morning & 🌇 Evening image posts</li>
+          <li><span class="check">✓</span> 1 video post/week (all platforms)</li>
+          <li><span class="check">✓</span> AI content generation</li>
+          <li><span class="check">✓</span> Social media scraping</li>
+          <li><span class="check">✓</span> Priority AI model</li>
+          <li><span class="check">✓</span> 7-day free trial</li>
+        </ul>
+        <button class="btn-accent btn-full" onclick="selectPlanAndSignup('unlimited')">Start Free Trial</button>
+        <div class="price-trial">7 days free, then ₦5,000/month</div>
+      </div>
+
+      <div class="price-card pro">
+        <div class="price-badge">Pro</div>
+        <div class="price-name">Pro Unlimited</div>
+        <div class="price-amount">₦10,000</div>
+        <div class="price-period">per month</div>
+        <div class="image-slot">🌅 Morning image post</div>
+        <div class="image-slot">☀️ Afternoon image post</div>
+        <div class="image-slot">🌙 Night image post</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 20 text posts/day (X & Facebook)</li>
+          <li><span class="check">✓</span> 3 image posts/day (X, Facebook & Instagram)</li>
+          <li><span class="check">✓</span> 2 video posts/week (all platforms)</li>
+          <li><span class="check">✓</span> Text post every 30 mins</li>
+          <li><span class="check">✓</span> AI content + images + videos</li>
+          <li><span class="check">✓</span> Social media scraping</li>
+          <li><span class="check">✓</span> Priority AI model</li>
+          <li><span class="check">✓</span> 7-day free trial</li>
+        </ul>
+        <button class="btn-accent btn-full" style="background:#7c3aed" onclick="selectPlanAndSignup('pro')">Start Free Trial</button>
+        <div class="price-trial">7 days free, then ₦10,000/month</div>
+      </div>
+
+      <div class="price-card agency">
+        <div class="price-badge" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)">Agency 🏢</div>
+        <div class="price-name">Social Media Manager</div>
+        <div class="price-amount">₦25,000</div>
+        <div class="price-period">per month</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Up to 10 client accounts</li>
+          <li><span class="check">✓</span> X, Facebook & Instagram per client</li>
+          <li><span class="check">✓</span> 20 text posts/day per client</li>
+          <li><span class="check">✓</span> 3 image posts/day per client</li>
+          <li><span class="check">✓</span> 2 video posts/week per client</li>
+          <li><span class="check">✓</span> Per-client niche settings</li>
+          <li><span class="check">✓</span> One dashboard for all</li>
+          <li><span class="check">✓</span> AI content + images + videos</li>
+          <li><span class="check">✓</span> Priority AI model</li>
+          <li><span class="check">✓</span> 7-day free trial</li>
+        </ul>
+        <button class="btn-accent btn-full" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)" onclick="selectPlanAndSignup('agency')">Start Free Trial</button>
+        <div class="price-trial">7 days free, then ₦25,000/month</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: SIGNUP
+══════════════════════════════ -->
+<div id="signup" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Create Account</div>
+      <div class="auth-sub">Start your free 7-day trial today</div>
+
+      <div class="trial-note">🎉 7 days completely free — no payment needed now</div>
+
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" id="su-name" placeholder="e.g. Amara Osei"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" id="su-email" type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="su-pass" type="password" placeholder="Min. 6 characters"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Choose Your Plan</label>
+        <div class="plan-selector" style="grid-template-columns:1fr 1fr">
+          <div class="plan-opt selected" id="plan-limited" onclick="selectPlan('limited')">
+            <div class="plan-opt-name">Limited</div>
+            <div class="plan-opt-price">₦3k</div>
+            <div class="plan-opt-limit">5 posts/day</div>
+          </div>
+          <div class="plan-opt" id="plan-unlimited" onclick="selectPlan('unlimited')">
+            <div class="plan-opt-name">Unlimited</div>
+            <div class="plan-opt-price">₦5k</div>
+            <div class="plan-opt-limit">20 posts/day</div>
+          </div>
+          <div class="plan-opt" id="plan-pro" onclick="selectPlan('pro')" style="border-color:#e9d5ff">
+            <div class="plan-opt-name" style="color:#7c3aed">Pro ✨</div>
+            <div class="plan-opt-price" style="color:#7c3aed">₦10k</div>
+            <div class="plan-opt-limit">20 posts + images</div>
+          </div>
+          <div class="plan-opt" id="plan-agency" onclick="selectPlan('agency')" style="border-color:#bae6fd">
+            <div class="plan-opt-name" style="color:#0ea5e9">Agency 🏢</div>
+            <div class="plan-opt-price" style="color:#0ea5e9">₦25k</div>
+            <div class="plan-opt-limit">10 clients</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-accent btn-full" onclick="signUp()">🚀 Create Account & Start Trial</button>
+      <div class="auth-switch">Already have an account? <a href="#" onclick="showScreen('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: LOGIN
+══════════════════════════════ -->
+<div id="login" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-title">Welcome Back</div>
+      <div class="auth-sub">Sign in to your AutoPost account</div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" id="li-email" type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="li-pass" type="password" placeholder="Your password"/>
+      </div>
+      <button class="btn-accent btn-full" onclick="login()">Sign In</button>
+      <div class="auth-switch">Don't have an account? <a href="#" onclick="showScreen('signup')">Sign up free</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: DASHBOARD
+══════════════════════════════ -->
+<div id="dashboard" class="screen">
+
+  <div class="dash-header">
+    <div class="dash-welcome">👋 Good morning, <span id="dash-name">Miracle</span></div>
+    <div class="dash-plan-info">
+      <span id="dash-plan-label">Limited Plan</span>
+      <span class="dash-trial-badge" id="dash-trial-badge">7 days left in trial</span>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- UPGRADE BANNER (limited only) -->
+    <div class="upgrade-banner" id="upgrade-banner" style="display:none">
+      <div class="upgrade-banner-text">
+        <h3>Upgrade to Unlimited</h3>
+        <p>Get 20 text + 2 image posts + 1 video/week for ₦5,000/month</p>
+      </div>
+      <button class="upgrade-btn" onclick="showToast('Payment integration coming soon!')">Upgrade →</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-box-val" id="stat-today">0</div>
+        <div class="stat-box-label">Today</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-val" id="stat-remaining">5</div>
+        <div class="stat-box-label">Remaining</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-val" id="stat-total">0</div>
+        <div class="stat-box-label">All Time</div>
+      </div>
+    </div>
+
+    <!-- POSTS BAR -->
+    <div class="config-card">
+      <div class="posts-bar-label">
+        <span>Daily Posts Used</span>
+        <span id="bar-label">0 / 5</span>
+      </div>
+      <div class="posts-bar-track">
+        <div class="posts-bar-fill" id="posts-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- SOURCE SELECTOR -->
+    <div class="config-card">
+      <div class="config-title">📡 Content Source</div>
+      <div class="source-tabs">
+        <div class="source-tab active" id="tab-ai" onclick="setSource('ai')">🤖 AI Generate</div>
+        <div class="source-tab" id="tab-scrape" onclick="setSource('scrape')">🔍 Scrape Social</div>
+      </div>
+
+      <!-- AI SOURCE -->
+      <div id="ai-source-panel">
+        <div class="section-label">Select Your Niche</div>
+        <div class="niche-grid" id="niche-grid">
+          <div class="niche-chip selected" onclick="selectNiche(this)">💼 Business</div>
+          <div class="niche-chip" onclick="selectNiche(this)">🏠 Real Estate</div>
+          <div class="niche-chip" onclick="selectNiche(this)">👗 Fashion</div>
+          <div class="niche-chip" onclick="selectNiche(this)">💰 Finance</div>
+          <div class="niche-chip" onclick="selectNiche(this)">🏋️ Fitness</div>
+          <div class="niche-chip" onclick="selectNiche(this)">🍔 Food</div>
+          <div class="niche-chip" onclick="selectNiche(this)">🤖 Tech & AI</div>
+          <div class="niche-chip" onclick="selectNiche(this)">✈️ Travel</div>
+          <div class="niche-chip" onclick="selectNiche(this)">🎓 Education</div>
+          <div class="niche-chip" onclick="selectNiche(this)">🎵 Music</div>
+        </div>
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Or type a custom niche</label>
+          <input class="form-input" id="custom-niche" placeholder="e.g. Nigerian politics, Crypto, Parenting..."/>
+        </div>
+      </div>
+
+      <!-- SCRAPE SOURCE -->
+      <div id="scrape-source-panel" style="display:none">
+        <div class="section-label">Scrape From</div>
+        <div class="source-tabs">
+          <div class="source-tab active" id="scrape-x" onclick="setScrapeSource('x')">𝕏 X (Twitter)</div>
+          <div class="source-tab" id="scrape-fb" onclick="setScrapeSource('fb')">📘 Facebook</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Search keyword or hashtag</label>
+          <input class="form-input" id="scrape-keyword" placeholder="e.g. #realestate, fashion tips, motivation"/>
+        </div>
+        <div style="background:rgba(255,77,0,0.06);border:1px solid rgba(255,77,0,0.15);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--accent)">
+          ⚠️ Scraping uses AI to find trending content matching your keyword and rewrites it into original posts.
+        </div>
+      </div>
+    </div>
+
+    <!-- PLATFORMS -->
+    <div class="config-card">
+      <div class="config-title">📲 Post To</div>
+      <div class="platform-toggles">
+        <div class="platform-toggle" id="toggle-x" onclick="togglePlatform('x')">
+          <div class="platform-toggle-icon">𝕏</div>
+          <div>
+            <div class="platform-toggle-label">X (Twitter)</div>
+            <div class="platform-toggle-status" id="x-status">Not connected</div>
+          </div>
+        </div>
+        <div class="platform-toggle" id="toggle-fb" onclick="togglePlatform('fb')">
+          <div class="platform-toggle-icon">📘</div>
+          <div>
+            <div class="platform-toggle-label">Facebook</div>
+            <div class="platform-toggle-status" id="fb-status">Not connected</div>
+          </div>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Auto-Schedule</div>
+          <div class="toggle-desc">Post automatically every 30 minutes</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="auto-schedule" checked/>
+          <div class="toggle-slider"></div>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Add Hashtags</div>
+          <div class="toggle-desc">Auto-add relevant hashtags to posts</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="add-hashtags" checked/>
+          <div class="toggle-slider"></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- SCHEDULE INFO -->
+    <div class="config-card">
+      <div class="config-title">⏰ Schedule</div>
+      <div class="schedule-info">
+        <span>Posting frequency</span>
+        <span class="schedule-val">Every 30 minutes</span>
+      </div>
+      <div class="schedule-info">
+        <span>Next post in</span>
+        <span class="schedule-val" id="next-post-timer">28:42</span>
+      </div>
+      <div class="schedule-info" style="margin:0">
+        <span>Posts remaining today</span>
+        <span class="schedule-val" id="remaining-label">5 posts</span>
+      </div>
+    </div>
+
+    <!-- GENERATE NOW -->
+    <button class="generate-btn" id="generate-btn" onclick="generateNow()">
+      ⚡ Generate & Post Now
+    </button>
+
+    <!-- ACTIVITY FEED -->
+    <div class="config-card">
+      <div class="config-title">📋 Recent Posts</div>
+      <div class="activity-feed" id="activity-feed">
+        <div style="text-align:center;padding:20px;font-size:13px;color:var(--muted)">No posts yet — hit Generate to start! 🚀</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="bottom-nav-item active" onclick="switchTab('home',this)">
+      <div class="bnav-icon">🏠</div>
+      <div class="bnav-label">Home</div>
+    </button>
+    <button class="bottom-nav-item" onclick="switchTab('posts',this)">
+      <div class="bnav-icon">📝</div>
+      <div class="bnav-label">Posts</div>
+    </button>
+    <button class="bottom-nav-item" onclick="switchTab('settings',this)">
+      <div class="bnav-icon">⚙️</div>
+      <div class="bnav-label">Settings</div>
+    </button>
+    <button class="bottom-nav-item" onclick="switchTab('account',this)">
+      <div class="bnav-icon">👤</div>
+      <div class="bnav-label">Account</div>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: AGENCY DASHBOARD
+══════════════════════════════ -->
+<div id="agency-dashboard" class="screen">
+
+  <div class="dash-header" style="background:linear-gradient(135deg,#001a2e,#0a0a12);color:#fff;border-color:#0ea5e920">
+    <div class="dash-welcome" style="color:#fff">🏢 Agency Dashboard</div>
+    <div class="dash-plan-info">
+      <span style="color:#7dd3fc" id="agency-plan-label">Social Media Manager · 10 clients</span>
+      <span class="dash-trial-badge" id="agency-trial-badge">7 days left in trial</span>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- AGENCY STATS -->
+    <div class="agency-stats">
+      <div class="agency-stat">
+        <div class="agency-stat-val" id="ag-stat-clients">0</div>
+        <div class="agency-stat-label">Clients Added</div>
+      </div>
+      <div class="agency-stat">
+        <div class="agency-stat-val" id="ag-stat-running">0</div>
+        <div class="agency-stat-label">Running Now</div>
+      </div>
+      <div class="agency-stat">
+        <div class="agency-stat-val" id="ag-stat-posts">0</div>
+        <div class="agency-stat-label">Posts Today</div>
+      </div>
+      <div class="agency-stat">
+        <div class="agency-stat-val" id="ag-stat-slots">10</div>
+        <div class="agency-stat-label">Slots Left</div>
+      </div>
+    </div>
+
+    <!-- CLIENT LIST -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="section-label" style="margin:0">Client Accounts</div>
+      <span style="font-size:11px;color:var(--muted)" id="ag-slots-label">0 / 10 slots used</span>
+    </div>
+
+    <div id="agency-clients-list"></div>
+
+    <button class="add-client-btn" id="add-client-btn" onclick="openAddClientModal()">
+      ＋ Add New Client Account
+    </button>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="bottom-nav-item active" onclick="agencyTab('clients',this)">
+      <div class="bnav-icon">👥</div>
+      <div class="bnav-label">Clients</div>
+    </button>
+    <button class="bottom-nav-item" onclick="agencyTab('calendar',this)">
+      <div class="bnav-icon">📅</div>
+      <div class="bnav-label">Calendar</div>
+    </button>
+    <button class="bottom-nav-item" onclick="agencyTab('reports',this)">
+      <div class="bnav-icon">📊</div>
+      <div class="bnav-label">Reports</div>
+    </button>
+    <button class="bottom-nav-item" onclick="agencyTab('account',this)">
+      <div class="bnav-icon">👤</div>
+      <div class="bnav-label">Account</div>
+    </button>
+  </div>
+</div>
+
+<!-- ADD CLIENT MODAL -->
+<div id="add-client-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:flex-end;justify-content:center" onclick="closeAddClientModal(event)">
+  <div style="background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;padding:24px 20px;animation:slideUp .3s">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800">Add Client Account</div>
+      <button onclick="document.getElementById('add-client-modal').style.display='none'" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Client / Business Name</label>
+      <input class="form-input" id="ac-name" placeholder="e.g. Glamour House PH"/>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Niche / Industry</label>
+      <div class="niche-grid" id="ac-niche-grid" style="margin-bottom:8px">
+        <div class="niche-chip selected" onclick="selectClientNiche(this)">💼 Business</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">🏠 Real Estate</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">👗 Fashion</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">💰 Finance</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">🏋️ Fitness</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">🍔 Food</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">🤖 Tech & AI</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">✈️ Travel</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">🎓 Education</div>
+        <div class="niche-chip" onclick="selectClientNiche(this)">🎵 Music</div>
+      </div>
+      <input class="form-input" id="ac-custom-niche" placeholder="Or type custom niche..."/>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Connect Platforms</label>
+      <div style="display:flex;gap:10px;margin-bottom:8px">
+        <div id="ac-toggle-x" onclick="toggleClientPlatform('x')" style="flex:1;border:1.5px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s">
+          <span style="font-size:18px">𝕏</span>
+          <div>
+            <div style="font-size:13px;font-weight:600">X (Twitter)</div>
+            <div style="font-size:10px;color:var(--muted)" id="ac-x-status">Tap to connect</div>
+          </div>
+        </div>
+        <div id="ac-toggle-fb" onclick="toggleClientPlatform('fb')" style="flex:1;border:1.5px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s">
+          <span style="font-size:18px">📘</span>
+          <div>
+            <div style="font-size:13px;font-weight:600">Facebook</div>
+            <div style="font-size:10px;color:var(--muted)" id="ac-fb-status">Tap to connect</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Content Source</label>
+      <div style="display:flex;gap:8px">
+        <div id="ac-src-ai" onclick="setClientSource('ai')" class="source-tab active" style="flex:1">🤖 AI Generate</div>
+        <div id="ac-src-scrape" onclick="setClientSource('scrape')" class="source-tab" style="flex:1">🔍 Scrape Social</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn-accent" style="flex:1;justify-content:center;border-radius:12px" onclick="saveClientAccount()">Add Client</button>
+      <button class="btn-outline" style="border-radius:12px" onclick="document.getElementById('add-client-modal').style.display='none'">Cancel</button>
+    </div>
+  </div>
+</div>
+<script>
+// ── STATE ─────────────────────────────────────────────────────────────
+// ── BACKEND CONFIG ────────────────────────────────────────────────────
+const API_BASE = ''; // Same domain — Vercel serverless functions
+let authToken = localStorage.getItem('autopost_token') || null;
+
+async function apiCall(endpoint, body, method = 'POST') {
+  const headers = { 'Content-Type': 'application/json' };
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+  const res = await fetch(`/api/${endpoint}`, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined
+  });
+  return res.json();
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────
+async function signUp(){
+  const name = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pass = document.getElementById('su-pass').value;
+  if(!name){showToast('Please enter your name');return;}
+  if(!email||!email.includes('@')){showToast('Please enter a valid email');return;}
+  if(pass.length < 6){showToast('Password must be at least 6 characters');return;}
+  showLoader('Creating your account...');
+  try {
+    const data = await apiCall('auth', { action: 'signup', name, email, password: pass, plan: selectedPlanSignup });
+    hideLoader();
+    if (data.error) { showToast(data.error); return; }
+    authToken = data.token;
+    localStorage.setItem('autopost_token', authToken);
+    currentUser = {
+      name: data.user.name,
+      email: data.user.email,
+      plan: data.user.plan,
+      trialDaysLeft: Math.max(0, Math.ceil((new Date(data.user.trial_ends) - new Date()) / (1000*60*60*24))),
+      onTrial: data.user.on_trial,
+      joinDate: data.user.created_at,
+      id: data.user.id
+    };
+    if(currentUser.plan === 'agency'){
+      initAgencyDashboard();
+      showScreen('agency-dashboard');
+    } else {
+      initDashboard();
+      showScreen('dashboard');
+    }
+    showToast('Welcome to AutoPost! 🎉');
+  } catch(e) {
+    hideLoader();
+    showToast('Signup failed. Please try again.');
+  }
+}
+
+async function login(){
+  const email = document.getElementById('li-email').value.trim();
+  const pass = document.getElementById('li-pass').value;
+  if(!email||!pass){showToast('Please fill in all fields');return;}
+  showLoader('Signing you in...');
+  try {
+    const data = await apiCall('auth', { action: 'login', email, password: pass });
+    hideLoader();
+    if (data.error) { showToast(data.error); return; }
+    authToken = data.token;
+    localStorage.setItem('autopost_token', authToken);
+    currentUser = {
+      name: data.user.name,
+      email: data.user.email,
+      plan: data.user.plan,
+      trialDaysLeft: Math.max(0, Math.ceil((new Date(data.user.trial_ends) - new Date()) / (1000*60*60*24))),
+      onTrial: data.user.on_trial,
+      joinDate: data.user.created_at,
+      id: data.user.id,
+      postsToday: data.user.posts_today || 0,
+      totalPosts: data.user.total_posts || 0
+    };
+    postsToday = currentUser.postsToday;
+    totalPosts = currentUser.totalPosts;
+    if(currentUser.plan === 'agency'){
+      initAgencyDashboard();
+      showScreen('agency-dashboard');
+    } else {
+      initDashboard();
+      showScreen('dashboard');
+      loadPostHistory();
+    }
+    showToast('Welcome back! 👋');
+  } catch(e) {
+    hideLoader();
+    showToast('Login failed. Please try again.');
+  }
+}
+
+function logout() {
+  authToken = null;
+  currentUser = null;
+  localStorage.removeItem('autopost_token');
+  postsToday = 0;
+  totalPosts = 0;
+  activityLog = [];
+  showScreen('landing');
+}
+
+// ── LOAD POST HISTORY FROM DB ──────────────────────────────────────────
+async function loadPostHistory() {
+  if (!authToken) return;
+  try {
+    const data = await apiCall('posts', null, 'GET');
+    if (data.posts) {
+      activityLog = data.posts.map(p => ({
+        text: p.content,
+        platform: p.platform,
+        timestamp: new Date(p.posted_at || p.created_at).getTime(),
+        niche: p.niche
+      }));
+      updateActivityLog();
+    }
+  } catch(e) { console.error('Failed to load posts:', e); }
+}
+
+// ── SAVE POST TO DB ────────────────────────────────────────────────────
+async function savePost(content, platform, niche, source) {
+  if (!authToken) return;
+  try {
+    await apiCall('posts', { content, platform, niche, source, status: 'posted' });
+  } catch(e) { console.error('Failed to save post:', e); }
+}
+
+// ── AUTO-LOGIN ON PAGE LOAD ────────────────────────────────────────────
+async function autoLogin() {
+  const savedToken = localStorage.getItem('autopost_token');
+  if (!savedToken) return;
+  authToken = savedToken;
+  try {
+    // Verify token still valid by fetching posts
+    const data = await apiCall('posts', null, 'GET');
+    if (data.error) {
+      localStorage.removeItem('autopost_token');
+      authToken = null;
+    }
+  } catch(e) {
+    localStorage.removeItem('autopost_token');
+    authToken = null;
+  }
+}
+let selectedPlanSignup = 'limited';
+let contentSource = 'ai';
+let scrapeSource = 'x';
+let selectedNiche = '💼 Business';
+let platforms = {x:false, fb:false};
+let postsToday = 0;
+let totalPosts = 0;
+let activityLog = [];
+let timerInterval = null;
+let nextPostSeconds = 1800; // 30 minutes
+let autoRunning = false;
+let autoInterval = null;
+let imagePostsDone = {morning:false, afternoon:false, night:false};
+
+const planLimits = {limited:5, unlimited:20, pro:20, agency:20};
+const planPrices = {limited:'₦3,000', unlimited:'₦5,000', pro:'₦10,000', agency:'₦25,000'};
+const planImageSlots = {limited:2, unlimited:2, pro:3, agency:3};
+const planImageTimes = {limited:["morning","evening"], unlimited:["morning","evening"], pro:["morning","afternoon","night"], agency:["morning","afternoon","night"]};
+const planVideoPerWeek = {limited:0, unlimited:1, pro:2, agency:2};
+const planPlatforms = { text: ["x","facebook"], image: ["x","facebook","instagram"], video: ["x","facebook","instagram"] };
+const planMaxClients = {limited:1, unlimited:1, pro:1, agency:10};
+
+// ── SCREEN MANAGEMENT ─────────────────────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── PLAN SELECTION ────────────────────────────────────────────────────
+function selectPlan(plan){
+  selectedPlanSignup = plan;
+  ['limited','unlimited','pro','agency'].forEach(p=>{
+    const el = document.getElementById('plan-'+p);
+    if(!el) return;
+    el.classList.toggle('selected', p===plan);
+    if(p==='pro'){el.style.borderColor=p===plan?'#7c3aed':'#e9d5ff';el.style.background=p===plan?'rgba(124,58,237,0.06)':'';}
+    if(p==='agency'){el.style.borderColor=p===plan?'#0ea5e9':'#bae6fd';el.style.background=p===plan?'rgba(14,165,233,0.06)':'';}
+  });
+}
+
+function selectPlanAndSignup(plan){
+  selectedPlanSignup = plan;
+  showScreen('signup');
+  selectPlan(plan);
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────
+function signUp(){
+  const name = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pass = document.getElementById('su-pass').value;
+  if(!name){showToast('Please enter your name');return;}
+  if(!email||!email.includes('@')){showToast('Please enter a valid email');return;}
+  if(pass.length < 6){showToast('Password must be at least 6 characters');return;}
+  showLoader('Creating your account...');
+  setTimeout(()=>{
+    hideLoader();
+    currentUser = {
+      name, email,
+      plan: selectedPlanSignup,
+      trialDaysLeft: 7,
+      onTrial: true,
+      joinDate: new Date().toISOString()
+    };
+    if(selectedPlanSignup === 'agency'){
+      initAgencyDashboard();
+      showScreen('agency-dashboard');
+    } else {
+      initDashboard();
+      showScreen('dashboard');
+    }
+    showToast('Welcome to AutoPost! 🎉');
+  }, 1800);
+}
+
+function login(){
+  const email = document.getElementById('li-email').value.trim();
+  const pass = document.getElementById('li-pass').value;
+  if(!email||!pass){showToast('Please fill in all fields');return;}
+  showLoader('Signing you in...');
+  setTimeout(()=>{
+    hideLoader();
+    // Demo login
+    currentUser = {
+      name: email.split('@')[0],
+      email,
+      plan: 'limited',
+      trialDaysLeft: 5,
+      onTrial: true,
+      joinDate: new Date().toISOString()
+    };
+    initDashboard();
+    showScreen('dashboard');
+    showToast('Welcome back! 👋');
+  }, 1500);
+}
+
+// ── DASHBOARD INIT ────────────────────────────────────────────────────
+function initDashboard(){
+  if(!currentUser)return;
+  const limit = planLimits[currentUser.plan];
+  document.getElementById('dash-name').textContent = currentUser.name.split(' ')[0];
+  document.getElementById('dash-plan-label').textContent =
+    currentUser.plan === 'limited' ? 'Limited Plan · 5 text + 2 image posts/day' :
+    currentUser.plan === 'pro' ? 'Pro Unlimited · 20 text + 3 image + 2 video/week' :
+    'Unlimited Plan · 20 text + 2 image + 1 video/week';
+  document.getElementById('dash-trial-badge').textContent =
+    currentUser.onTrial ? `${currentUser.trialDaysLeft} days left in trial` : 'Active';
+  document.getElementById('nav-plan-badge').style.display = 'block';
+  document.getElementById('nav-plan-badge').textContent =
+    currentUser.onTrial ? 'FREE TRIAL' : currentUser.plan.toUpperCase();
+  document.getElementById('nav-plan-badge').style.background =
+    currentUser.plan === 'pro' ? '#7c3aed' : 'var(--accent)';
+
+  if(currentUser.plan === 'limited'){
+    document.getElementById('upgrade-banner').style.display = 'flex';
+    document.getElementById('upgrade-banner').querySelector('h3').textContent = 'Upgrade to Unlimited';
+    document.getElementById('upgrade-banner').querySelector('p').textContent = 'Get 20 text + 2 image posts + 1 video/week for ₦5,000/month';
+  } else if(currentUser.plan === 'unlimited'){
+    document.getElementById('upgrade-banner').style.display = 'flex';
+    document.getElementById('upgrade-banner').style.background = 'linear-gradient(135deg,#7c3aed,#a855f7)';
+    document.getElementById('upgrade-banner').querySelector('h3').textContent = 'Upgrade to Pro Unlimited';
+    document.getElementById('upgrade-banner').querySelector('p').textContent = 'Get 3 image posts + 2 videos/week for ₦10,000/month';
+  } else {
+    document.getElementById('upgrade-banner').style.display = 'none';
+  }
+
+  // Show image slots card for pro users
+  const existingImgCard = document.getElementById('image-slots-card');
+  if(currentUser.plan === 'pro' && !existingImgCard){
+    const statsRow = document.querySelector('.stats-row');
+    const imgCard = document.createElement('div');
+    imgCard.id = 'image-slots-card';
+    imgCard.className = 'config-card';
+    imgCard.style.borderColor = '#7c3aed';
+    imgCard.innerHTML = `
+      <div class="config-title">🖼️ Image Posts Today</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div id="img-morning" style="background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:20px">🌅</div>
+          <div style="font-size:12px;font-weight:600;margin-top:6px">Morning</div>
+          <div id="img-morning-status" style="font-size:10px;color:var(--muted);margin-top:2px">Pending</div>
+        </div>
+        <div id="img-afternoon" style="background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:20px">☀️</div>
+          <div style="font-size:12px;font-weight:600;margin-top:6px">Afternoon</div>
+          <div id="img-afternoon-status" style="font-size:10px;color:var(--muted);margin-top:2px">Pending</div>
+        </div>
+        <div id="img-night" style="background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:20px">🌙</div>
+          <div style="font-size:12px;font-weight:600;margin-top:6px">Night</div>
+          <div id="img-night-status" style="font-size:10px;color:var(--muted);margin-top:2px">Pending</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;text-align:center">Image posts are auto-scheduled: 8AM · 1PM · 8PM</div>
+    `;
+    statsRow.insertAdjacentElement('afterend', imgCard);
+  } else if(currentUser.plan !== 'pro' && existingImgCard){
+    existingImgCard.remove();
+  }
+  updateStats();
+  startTimer();
+}
+
+function updateStats(){
+  if(!currentUser)return;
+  const limit = planLimits[currentUser.plan];
+  const remaining = Math.max(0, limit - postsToday);
+  document.getElementById('stat-today').textContent = postsToday;
+  document.getElementById('stat-remaining').textContent = remaining;
+  document.getElementById('stat-total').textContent = totalPosts;
+  document.getElementById('bar-label').textContent = `${postsToday} / ${limit}`;
+  document.getElementById('remaining-label').textContent = `${remaining} posts`;
+  document.getElementById('posts-bar').style.width = `${Math.min(100,(postsToday/limit)*100)}%`;
+
+  const btn = document.getElementById('generate-btn');
+  if(postsToday >= limit){
+    btn.disabled = true;
+    btn.textContent = '⛔ Daily limit reached';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = autoRunning ? '⏸ Pause Auto-Posting' : '⚡ Generate & Post Now';
+    if(autoRunning) btn.classList.add('running');
+    else btn.classList.remove('running');
+  }
+}
+
+// ── TIMER ─────────────────────────────────────────────────────────────
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    nextPostSeconds--;
+    if(nextPostSeconds <= 0){
+      nextPostSeconds = 1800;
+      if(document.getElementById('auto-schedule').checked && autoRunning){
+        generateNow();
+      }
+    }
+    const m = Math.floor(nextPostSeconds/60).toString().padStart(2,'0');
+    const s = (nextPostSeconds%60).toString().padStart(2,'0');
+    const el = document.getElementById('next-post-timer');
+    if(el) el.textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+// ── SOURCE & NICHE ────────────────────────────────────────────────────
+function setSource(src){
+  contentSource = src;
+  document.getElementById('tab-ai').classList.toggle('active', src==='ai');
+  document.getElementById('tab-scrape').classList.toggle('active', src==='scrape');
+  document.getElementById('ai-source-panel').style.display = src==='ai'?'block':'none';
+  document.getElementById('scrape-source-panel').style.display = src==='scrape'?'block':'none';
+}
+
+function setScrapeSource(src){
+  scrapeSource = src;
+  document.getElementById('scrape-x').classList.toggle('active', src==='x');
+  document.getElementById('scrape-fb').classList.toggle('active', src==='fb');
+}
+
+function selectNiche(el){
+  document.querySelectorAll('.niche-chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedNiche = el.textContent;
+  document.getElementById('custom-niche').value = '';
+}
+
+// ── PLATFORMS ─────────────────────────────────────────────────────────
+function togglePlatform(p){
+  platforms[p] = !platforms[p];
+  const toggle = document.getElementById('toggle-'+p);
+  const status = document.getElementById(p+'-status');
+  if(platforms[p]){
+    toggle.classList.add(p==='x'?'active-x':'active-fb');
+    status.textContent = 'Connected ✓';
+    status.style.color = 'var(--green)';
+    showToast(`${p==='x'?'X':'Facebook'} connected! ✓`);
+  } else {
+    toggle.classList.remove('active-x','active-fb');
+    status.textContent = 'Not connected';
+    status.style.color = '';
+  }
+}
+
+// ── GENERATE POST ─────────────────────────────────────────────────────
+async function generateNow(){
+  if(!currentUser)return;
+  const limit = planLimits[currentUser.plan];
+  if(postsToday >= limit){showToast('Daily post limit reached!');return;}
+  if(!platforms.x && !platforms.fb){
+    showToast('Please connect at least one platform first!');
+    return;
+  }
+
+  const niche = document.getElementById('custom-niche').value.trim() || selectedNiche.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').trim() || 'Business';
+  const keyword = document.getElementById('scrape-keyword')?.value.trim() || niche;
+  const addHashtags = document.getElementById('add-hashtags').checked;
+
+  // Toggle auto-run
+  if(!autoRunning){
+    autoRunning = true;
+    updateStats();
+  }
+
+  // Determine if this is an image post (pro plan only)
+  const hour = new Date().getHours();
+  const isImagePost = currentUser.plan === 'pro' && (
+    (hour >= 7 && hour < 10 && !imagePostsDone.morning) ||
+    (hour >= 12 && hour < 15 && !imagePostsDone.afternoon) ||
+    (hour >= 19 && hour < 22 && !imagePostsDone.night)
+  );
+  const imageSlot = isImagePost ?
+    (hour < 10 ? 'morning' : hour < 15 ? 'afternoon' : 'night') : null;
+
+  const loadingMessages = [
+    contentSource==='scrape'?`Scanning ${scrapeSource==='x'?'X':'Facebook'} for trending "${keyword}" posts...`:`Researching trending ${niche} content...`,
+    isImagePost ? 'Generating image for post...' : 'AI is rewriting the content...',
+    'Optimising for engagement...',
+    'Scheduling post...'
+  ];
+
+  let msgIdx = 0;
+  showLoader(loadingMessages[0]);
+  const msgTimer = setInterval(()=>{
+    msgIdx++;
+    if(msgIdx < loadingMessages.length){
+      document.getElementById('loader-text').textContent = loadingMessages[msgIdx];
+    }
+  }, 800);
+
+  try {
+    const prompt = contentSource === 'scrape'
+      ? `You are a social media expert. Generate ONE high-performing ${scrapeSource==='x'?'tweet':'Facebook post'} about "${keyword}". 
+         Make it sound like a top-performing viral post — engaging, punchy, real. 
+         ${addHashtags?'Add 3-5 relevant hashtags at the end.':'No hashtags.'}
+         Max 280 characters for X, 500 for Facebook. Return ONLY the post text, nothing else.`
+      : `You are a viral social media content creator. Generate ONE engaging social media post about "${niche}".
+         Make it trending, relatable, and shareable — the kind of content that goes viral.
+         ${addHashtags?'Add 3-5 relevant hashtags at the end.':'No hashtags.'}
+         Max 280 characters. Return ONLY the post text, nothing else.`;
+
+    const response = await apiCall('generate', {
+      niche,
+      source: contentSource,
+      keyword,
+      platform: platforms.x ? 'x' : 'facebook',
+      contentType: 'post'
+    });
+    if (response.error) throw new Error(response.error);
+    const generatedText = response.content;
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+
+    clearInterval(msgTimer);
+    hideLoader();
+
+    const data = await response.json();
+    const postText = data.content?.[0]?.text?.trim() || generateFallbackPost(niche, addHashtags);
+
+    // Log the post
+    postsToday++;
+    totalPosts++;
+    nextPostSeconds = 1800;
+
+    const connectedPlatforms = [];
+    if(platforms.x) connectedPlatforms.push('X');
+    if(platforms.fb) connectedPlatforms.push('Facebook');
+
+    activityLog.unshift({
+      text: postText,
+      platforms: connectedPlatforms,
+      time: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+      status: 'posted',
+      niche: niche,
+      source: contentSource,
+      hasImage: isImagePost,
+      imageSlot: imageSlot
+    });
+
+    // Update image slot status for pro users
+    if(isImagePost && imageSlot){
+      imagePostsDone[imageSlot] = true;
+      const statusEl = document.getElementById(`img-${imageSlot}-status`);
+      const slotEl = document.getElementById(`img-${imageSlot}`);
+      if(statusEl) statusEl.textContent = 'Posted ✓';
+      if(statusEl) statusEl.style.color = 'var(--green)';
+      if(slotEl) slotEl.style.borderColor = 'var(--green)';
+      if(slotEl) slotEl.style.background = 'rgba(22,163,74,0.06)';
+    }
+
+    updateStats();
+    renderActivityFeed();
+    showToast(`✅ Posted to ${connectedPlatforms.join(' & ')}!`);
+
+  } catch(err) {
+    clearInterval(msgTimer);
+    hideLoader();
+    // Fallback if API not available
+    const postText = generateFallbackPost(niche, addHashtags);
+    postsToday++;
+    totalPosts++;
+
+    const connectedPlatforms = [];
+    if(platforms.x) connectedPlatforms.push('X');
+    if(platforms.fb) connectedPlatforms.push('Facebook');
+
+    activityLog.unshift({
+      text: postText,
+      platforms: connectedPlatforms,
+      time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+      status: 'posted',
+      niche: niche,
+      source: 'ai'
+    });
+
+    updateStats();
+    renderActivityFeed();
+    showToast(`✅ Posted to ${connectedPlatforms.join(' & ')}!`);
+  }
+}
+
+function generateFallbackPost(niche, addHashtags){
+  const posts = {
+    'Business':['Stop waiting for the perfect moment. The best time to start your business was yesterday. The second best time is now. 🚀','Most people overestimate what they can do in a day and underestimate what they can do in a year. Stay consistent.','Your network is your net worth. Invest in relationships before you need them.'],
+    'Real Estate':['Property in Nigeria is not losing value anytime soon. The earlier you invest, the better your returns. 🏠','Stop renting someone else\'s dream. Start building your own. Real estate is the most reliable wealth builder.','Location, location, location. But in 2026 it\'s also: timing, timing, timing. The market is moving.'],
+    'Fashion':['Your outfit is your first impression. Make it count every single day. 👗✨','Style is not about expensive clothes. It\'s about wearing your confidence out loud.','Fashion fades. Style is eternal. Know the difference.'],
+    'Finance':['You don\'t need a huge salary to build wealth. You need discipline, a plan and consistency. 💰','The best investment you can make is in yourself. Second best? Start early, stay consistent.','Rich people buy assets. Everyone else buys liabilities thinking they\'re assets.'],
+    'Tech & AI':['AI is not replacing humans. AI is replacing humans who don\'t use AI. 🤖 Adapt or get left behind.','The companies winning in 2026 are the ones that started automating in 2024. Don\'t wait.','Every skill you learn today is an investment that compounds. Tech skills are paying the most.'],
+  };
+  const fallback = ['Big things are coming. Stay consistent and trust the process. 🔥','Every expert was once a beginner. Every pro was once an amateur. Keep going.','Your daily habits determine your future results. Choose them wisely.'];
+  const nicheKey = Object.keys(posts).find(k=>niche.includes(k)) || null;
+  const pool = nicheKey ? posts[nicheKey] : fallback;
+  const post = pool[Math.floor(Math.random()*pool.length)];
+  if(addHashtags){
+    const tags = {Business:'#Business #Entrepreneurship #Success',
+      'Real Estate':'#RealEstate #Property #Investment',
+      Fashion:'#Fashion #Style #OOTD',Finance:'#Finance #Money #Wealth',
+      'Tech & AI':'#AI #Tech #Innovation'};
+    const tagKey = Object.keys(tags).find(k=>niche.includes(k));
+    return post + '\n\n' + (tagKey?tags[tagKey]:'#Motivation #Success #Growth');
+  }
+  return post;
+}
+
+// ── RENDER ACTIVITY ───────────────────────────────────────────────────
+function renderActivityFeed(){
+  const feed = document.getElementById('activity-feed');
+  if(!activityLog.length){
+    feed.innerHTML = '<div style="text-align:center;padding:20px;font-size:13px;color:var(--muted)">No posts yet — hit Generate to start! 🚀</div>';
+    return;
+  }
+  feed.innerHTML = activityLog.slice(0,10).map(a=>`
+    <div class="activity-item">
+      <div class="activity-icon ${a.status}">${a.hasImage?'🖼️':a.status==='posted'?'✅':a.status==='pending'?'⏳':'❌'}</div>
+      <div class="activity-body">
+        <div class="activity-text">${a.text.substring(0,120)}${a.text.length>120?'...':''}</div>
+        <div class="activity-meta">
+          <span>${a.time}</span>
+          <span>${a.platforms.join(' & ')}</span>
+          ${a.hasImage?`<span style="background:rgba(124,58,237,0.1);color:#7c3aed;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px">🖼️ ${a.imageSlot} image</span>`:''}
+          <span class="activity-status status-${a.status}">${a.status}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────────
+function switchTab(tab, btn){
+  document.querySelectorAll('.bottom-nav-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(tab==='account') showAccountPanel();
+  else if(tab==='home') hideAccountPanel();
+  else showToast(`${tab.charAt(0).toUpperCase()+tab.slice(1)} coming soon!`);
+}
+
+let accountVisible = false;
+function showAccountPanel(){
+  if(!currentUser)return;
+  accountVisible = true;
+  const dash = document.querySelector('.dash-body');
+  const header = document.querySelector('.dash-header');
+  header.style.display='none';
+  dash.innerHTML = `
+    <div class="account-screen" style="padding:0">
+      <div class="account-card">
+        <div class="account-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
+        <div class="account-name">${currentUser.name}</div>
+        <div class="account-email">${currentUser.email}</div>
+      </div>
+      <div class="account-card">
+        <div class="section-label">Subscription</div>
+        <div class="account-row"><span class="account-row-label">Plan</span><span class="account-row-val">${currentUser.plan.charAt(0).toUpperCase()+currentUser.plan.slice(1)}</span></div>
+        <div class="account-row"><span class="account-row-label">Price</span><span class="account-row-val">${planPrices[currentUser.plan]}/mo</span></div>
+        <div class="account-row"><span class="account-row-label">Status</span><span class="account-row-val" style="color:var(--green)">${currentUser.onTrial?`Free Trial (${currentUser.trialDaysLeft} days left)`:'Active'}</span></div>
+        <div class="account-row"><span class="account-row-label">Daily Limit</span><span class="account-row-val">${planLimits[currentUser.plan]} posts/day</span></div>
+        ${currentUser.plan==='limited'?`<button class="btn-accent btn-full" style="margin-top:12px;border-radius:10px" onclick="showToast('Payment integration coming soon!')">⚡ Upgrade to Unlimited</button>`:''}
+        ${currentUser.plan==='unlimited'?`<button class="btn-accent btn-full" style="margin-top:12px;border-radius:10px;background:#7c3aed" onclick="showToast('Payment integration coming soon!')">✨ Upgrade to Pro Unlimited</button>`:''}
+      </div>
+      <div class="account-card">
+        <div class="section-label">Stats</div>
+        <div class="account-row"><span class="account-row-label">Posts Today</span><span class="account-row-val">${postsToday}</span></div>
+        <div class="account-row"><span class="account-row-label">Total Posts</span><span class="account-row-val">${totalPosts}</span></div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Sign Out</button>
+    </div>`;
+}
+
+function hideAccountPanel(){
+  accountVisible = false;
+  document.querySelector('.dash-header').style.display='block';
+  initDashboard();
+  renderActivityFeed();
+}
+
+function logout(){
+  currentUser = null;
+  postsToday = 0;
+  totalPosts = 0;
+  activityLog = [];
+  autoRunning = false;
+  if(timerInterval) clearInterval(timerInterval);
+  document.getElementById('nav-plan-badge').style.display='none';
+  showScreen('landing');
+  showToast('Signed out successfully');
+}
+
+// ── AGENCY STATE ──────────────────────────────────────────────────────
+let agencyClients = [];
+let newClientPlatforms = {x:false, fb:false};
+let newClientNiche = '💼 Business';
+let newClientSource = 'ai';
+
+function initAgencyDashboard(){
+  if(!currentUser) return;
+  document.getElementById('agency-trial-badge').textContent =
+    currentUser.onTrial ? `${currentUser.trialDaysLeft} days left in trial` : 'Active';
+  renderAgencyClients();
+  updateAgencyStats();
+}
+
+function updateAgencyStats(){
+  const running = agencyClients.filter(c=>c.status==='running').length;
+  const postsToday = agencyClients.reduce((s,c)=>s+c.postsToday,0);
+  const slotsLeft = 10 - agencyClients.length;
+  document.getElementById('ag-stat-clients').textContent = agencyClients.length;
+  document.getElementById('ag-stat-running').textContent = running;
+  document.getElementById('ag-stat-posts').textContent = postsToday;
+  document.getElementById('ag-stat-slots').textContent = slotsLeft;
+  document.getElementById('ag-slots-label').textContent = `${agencyClients.length} / 10 slots used`;
+  // Hide add button if full
+  const addBtn = document.getElementById('add-client-btn');
+  if(addBtn) addBtn.style.display = agencyClients.length >= 10 ? 'none' : 'flex';
+}
+
+function renderAgencyClients(){
+  const list = document.getElementById('agency-clients-list');
+  if(!agencyClients.length){
+    list.innerHTML = `<div style="text-align:center;padding:28px;color:var(--muted);font-size:13px;font-style:italic">No clients yet — add your first client account below 👇</div>`;
+    return;
+  }
+  list.innerHTML = agencyClients.map((c,i)=>`
+    <div class="client-card ${c.status==='running'?'active-card':''}">
+      <div class="client-header">
+        <div>
+          <div class="client-name">${c.name}</div>
+          <div class="client-niche-label">${c.niche} · ${c.source==='ai'?'🤖 AI Generate':'🔍 Scrape'}</div>
+        </div>
+        <span class="client-status ${c.status}">${c.status==='running'?'▶ Running':c.status==='paused'?'⏸ Paused':'○ Idle'}</span>
+      </div>
+      <div class="client-platforms">
+        ${c.platforms.x?`<span class="client-platform-tag connected-x">𝕏 Connected</span>`:`<span class="client-platform-tag">𝕏 Not connected</span>`}
+        ${c.platforms.fb?`<span class="client-platform-tag connected-fb">📘 Connected</span>`:`<span class="client-platform-tag">📘 Not connected</span>`}
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Posts today: <strong style="color:var(--dark)">${c.postsToday}</strong> / 20</div>
+      <div class="client-actions">
+        ${c.status!=='running'
+          ?`<button class="client-btn client-btn-run" onclick="runClient(${i})">▶ Start</button>`
+          :`<button class="client-btn client-btn-pause" onclick="pauseClient(${i})">⏸ Pause</button>`}
+        <button class="client-btn client-btn-edit" onclick="generateForClient(${i})">⚡ Post Now</button>
+        <button class="client-btn client-btn-delete" onclick="deleteClient_agency(${i})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── ADD CLIENT MODAL ──────────────────────────────────────────────────
+function openAddClientModal(){
+  if(agencyClients.length >= 10){showToast('Maximum 10 clients reached!');return;}
+  newClientPlatforms = {x:false,fb:false};
+  newClientNiche = '💼 Business';
+  newClientSource = 'ai';
+  document.getElementById('ac-name').value='';
+  document.getElementById('ac-custom-niche').value='';
+  document.querySelectorAll('#ac-niche-grid .niche-chip').forEach((c,i)=>c.classList.toggle('selected',i===0));
+  document.getElementById('ac-toggle-x').style.borderColor='var(--border)';
+  document.getElementById('ac-toggle-fb').style.borderColor='var(--border)';
+  document.getElementById('ac-x-status').textContent='Tap to connect';
+  document.getElementById('ac-fb-status').textContent='Tap to connect';
+  document.getElementById('ac-src-ai').classList.add('active');
+  document.getElementById('ac-src-scrape').classList.remove('active');
+  document.getElementById('add-client-modal').style.display='flex';
+}
+
+function closeAddClientModal(e){
+  if(e.target===e.currentTarget) document.getElementById('add-client-modal').style.display='none';
+}
+
+function toggleClientPlatform(p){
+  newClientPlatforms[p] = !newClientPlatforms[p];
+  const el = document.getElementById('ac-toggle-'+p);
+  const status = document.getElementById('ac-'+p+'-status');
+  if(newClientPlatforms[p]){
+    el.style.borderColor = p==='x'?'#000':'#1877f2';
+    el.style.background = p==='x'?'rgba(0,0,0,0.03)':'rgba(24,119,242,0.04)';
+    status.textContent='Connected ✓';
+    status.style.color='var(--green)';
+  } else {
+    el.style.borderColor='var(--border)';
+    el.style.background='';
+    status.textContent='Tap to connect';
+    status.style.color='';
+  }
+}
+
+function selectClientNiche(el){
+  document.querySelectorAll('#ac-niche-grid .niche-chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  newClientNiche = el.textContent;
+  document.getElementById('ac-custom-niche').value='';
+}
+
+function setClientSource(src){
+  newClientSource=src;
+  document.getElementById('ac-src-ai').classList.toggle('active',src==='ai');
+  document.getElementById('ac-src-scrape').classList.toggle('active',src==='scrape');
+}
+
+function saveClientAccount(){
+  const name = document.getElementById('ac-name').value.trim();
+  if(!name){showToast('Please enter a client name');return;}
+  if(!newClientPlatforms.x && !newClientPlatforms.fb){showToast('Please connect at least one platform');return;}
+  const customNiche = document.getElementById('ac-custom-niche').value.trim();
+  const niche = customNiche || newClientNiche;
+  agencyClients.push({
+    id: Date.now(),
+    name, niche,
+    platforms:{...newClientPlatforms},
+    source: newClientSource,
+    status:'idle',
+    postsToday:0,
+    totalPosts:0,
+    imagePostsDone:{morning:false,afternoon:false,night:false}
+  });
+  document.getElementById('add-client-modal').style.display='none';
+  renderAgencyClients();
+  updateAgencyStats();
+  showToast(`${name} added! ✓`);
+}
+
+function runClient(i){
+  agencyClients[i].status='running';
+  renderAgencyClients();
+  updateAgencyStats();
+  showToast(`▶ ${agencyClients[i].name} is now running!`);
+}
+
+function pauseClient(i){
+  agencyClients[i].status='paused';
+  renderAgencyClients();
+  updateAgencyStats();
+  showToast(`⏸ ${agencyClients[i].name} paused`);
+}
+
+function deleteClient_agency(i){
+  if(!confirm(`Remove ${agencyClients[i].name}?`)) return;
+  agencyClients.splice(i,1);
+  renderAgencyClients();
+  updateAgencyStats();
+  showToast('Client removed');
+}
+
+async function generateForClient(i){
+  const client = agencyClients[i];
+  if(!client.platforms.x && !client.platforms.fb){showToast('No platform connected for this client');return;}
+  showLoader(`Generating post for ${client.name}...`);
+  setTimeout(async()=>{
+    try{
+      const response = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:1000,
+          messages:[{role:'user',content:`Generate ONE viral social media post about "${client.niche}". Make it engaging, punchy and shareable. Add 3 relevant hashtags. Max 280 characters. Return ONLY the post text.`}]
+        })
+      });
+      const data = await response.json();
+      const postText = data.content?.[0]?.text?.trim() || generateFallbackPost(client.niche, true);
+      client.postsToday++;
+      client.totalPosts++;
+      hideLoader();
+      renderAgencyClients();
+      updateAgencyStats();
+      showToast(`✅ Posted for ${client.name}!`);
+    } catch(e){
+      const postText = generateFallbackPost(client.niche, true);
+      client.postsToday++;
+      client.totalPosts++;
+      hideLoader();
+      renderAgencyClients();
+      updateAgencyStats();
+      showToast(`✅ Posted for ${client.name}!`);
+    }
+  }, 2000);
+}
+
+// ── AGENCY TAB SWITCHER ───────────────────────────────────────────────
+let currentAgencyTab = 'clients';
+let calendarDate = new Date();
+let selectedCalClient = 'all';
+let selectedReportClient = 0;
+
+function agencyTab(tab, btn){
+  document.querySelectorAll('#agency-dashboard .bottom-nav-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentAgencyTab = tab;
+  const body = document.querySelector('#agency-dashboard .dash-body');
+  if(tab==='clients') renderAgencyMainView(body);
+  else if(tab==='calendar') renderCalendarView(body);
+  else if(tab==='reports') renderReportsView(body);
+  else if(tab==='account') renderAgencyAccountView(body);
+}
+
+function renderAgencyMainView(body){
+  body.innerHTML = `
+    <div class="agency-stats">
+      <div class="agency-stat"><div class="agency-stat-val">${agencyClients.length}</div><div class="agency-stat-label">Clients Added</div></div>
+      <div class="agency-stat"><div class="agency-stat-val">${agencyClients.filter(c=>c.status==='running').length}</div><div class="agency-stat-label">Running Now</div></div>
+      <div class="agency-stat"><div class="agency-stat-val">${agencyClients.reduce((s,c)=>s+c.postsToday,0)}</div><div class="agency-stat-label">Posts Today</div></div>
+      <div class="agency-stat"><div class="agency-stat-val">${10-agencyClients.length}</div><div class="agency-stat-label">Slots Left</div></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="section-label" style="margin:0">Client Accounts</div>
+      <span style="font-size:11px;color:var(--muted)">${agencyClients.length} / 10 slots used</span>
+    </div>
+    <div id="agency-clients-list"></div>
+    <button class="add-client-btn" id="add-client-btn" onclick="openAddClientModal()" style="${agencyClients.length>=10?'display:none':''}">+ Add New Client Account</button>`;
+  renderAgencyClients();
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────────────
+function renderCalendarView(body){
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const now=new Date();
+  const year=calendarDate.getFullYear();
+  const month=calendarDate.getMonth();
+  const firstDay=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+
+  const filterChips=`<div class="client-filter">
+    <div class="filter-chip ${selectedCalClient==='all'?'active':''}" onclick="setCalClient('all',this)">All Clients</div>
+    ${agencyClients.map((c,i)=>`<div class="filter-chip ${selectedCalClient==i?'active':''}" onclick="setCalClient(${i},this)">${c.name}</div>`).join('')}
+  </div>`;
+
+  let calCells='';
+  days.forEach(d=>calCells+=`<div class="cal-day-label">${d}</div>`);
+  for(let i=0;i<firstDay;i++) calCells+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=d===now.getDate()&&month===now.getMonth()&&year===now.getFullYear();
+    const posts=getPostsForDay(d,month,year);
+    const dots=posts.slice(0,3).map(p=>`<div class="cal-post-dot dot-${p.platform}">${p.clientName.split(' ')[0]}</div>`).join('');
+    calCells+=`<div class="cal-day ${isToday?'today':''}" onclick="showDayDetail(${d},${month},${year})">
+      <div class="cal-day-num">${d}</div>${dots}
+      ${posts.length>3?`<div style="font-size:8px;color:var(--muted)">+${posts.length-3}</div>`:''}
+    </div>`;
+  }
+
+  body.innerHTML=`
+    <div class="cal-header">
+      <button class="cal-nav-btn" onclick="changeCalMonth(-1)">&#8249;</button>
+      <div class="cal-title">${months[month]} ${year}</div>
+      <button class="cal-nav-btn" onclick="changeCalMonth(1)">&#8250;</button>
+    </div>
+    ${filterChips}
+    <div class="cal-grid">${calCells}</div>
+    <div class="cal-legend">
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#000"></div> X post</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#1877f2"></div> Facebook</div>
+    </div>
+    <div class="cal-detail-panel" id="cal-detail-panel" style="display:none">
+      <div class="cal-detail-title" id="cal-detail-title"></div>
+      <div id="cal-detail-list"></div>
+    </div>`;
+}
+
+function getPostsForDay(day,month,year){
+  let posts=[];
+  const clients=selectedCalClient==='all'?agencyClients:[agencyClients[selectedCalClient]].filter(Boolean);
+  clients.forEach(c=>{
+    (c.postLog||[]).forEach(p=>{
+      const d=new Date(p.timestamp);
+      if(d.getDate()===day&&d.getMonth()===month&&d.getFullYear()===year)
+        posts.push({...p,clientName:c.name});
+    });
+  });
+  return posts;
+}
+
+function showDayDetail(day,month,year){
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const posts=getPostsForDay(day,month,year);
+  const panel=document.getElementById('cal-detail-panel');
+  if(!panel) return;
+  document.getElementById('cal-detail-title').textContent=`Posts on ${day} ${months[month]} ${year}`;
+  document.getElementById('cal-detail-list').innerHTML=posts.length
+    ?posts.map(p=>`<div class="cal-detail-item">
+        ${p.text.substring(0,100)}${p.text.length>100?'...':''}
+        <div class="cal-detail-meta">
+          <span>${p.clientName}</span>
+          <span style="color:${p.platform==='x'?'#000':'#1877f2'}">${p.platform==='x'?'X':'Facebook'}</span>
+          <span>${new Date(p.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+        </div></div>`).join('')
+    :`<div style="text-align:center;padding:16px;font-size:13px;color:var(--muted)">No posts on this day</div>`;
+  panel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth'});
+}
+
+function changeCalMonth(dir){
+  calendarDate.setMonth(calendarDate.getMonth()+dir);
+  renderCalendarView(document.querySelector('#agency-dashboard .dash-body'));
+}
+
+function setCalClient(val,el){
+  selectedCalClient=val==='all'?'all':parseInt(val);
+  renderCalendarView(document.querySelector('#agency-dashboard .dash-body'));
+}
+
+// ── REPORTS ───────────────────────────────────────────────────────────
+function renderReportsView(body){
+  if(!agencyClients.length){
+    body.innerHTML=`<div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:14px">No clients yet.<br/>Add clients to see reports.</div>`;
+    return;
+  }
+  const client=agencyClients[selectedReportClient]||agencyClients[0];
+  const log=client.postLog||[];
+  const thisMonth=new Date().getMonth();
+  const monthPosts=log.filter(p=>new Date(p.timestamp).getMonth()===thisMonth);
+  const xPosts=monthPosts.filter(p=>p.platform==='x').length;
+  const fbPosts=monthPosts.filter(p=>p.platform==='fb').length;
+  const imgPosts=monthPosts.filter(p=>p.hasImage).length;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const currentMonth=months[new Date().getMonth()];
+  const weeklyData=[0,0,0,0];
+  monthPosts.forEach(p=>{const w=Math.min(3,Math.floor((new Date(p.timestamp).getDate()-1)/7));weeklyData[w]++;});
+  const maxWeek=Math.max(...weeklyData,1);
+  const clientOptions=agencyClients.map((c,i)=>`<option value="${i}" ${i===selectedReportClient?'selected':''}>${c.name}</option>`).join('');
+
+  body.innerHTML=`
+    <div class="form-group" style="margin-bottom:16px">
+      <label class="form-label">Select Client</label>
+      <select class="form-select" onchange="switchReportClient(this.value)">${clientOptions}</select>
+    </div>
+    <div class="report-card">
+      <div class="report-card-title">&#128202; ${currentMonth} Overview &mdash; ${client.name}</div>
+      <div class="report-metrics">
+        <div class="report-metric"><div class="report-metric-val">${monthPosts.length}</div><div class="report-metric-label">Total Posts</div></div>
+        <div class="report-metric"><div class="report-metric-val">${client.postsToday}</div><div class="report-metric-label">Today</div></div>
+        <div class="report-metric"><div class="report-metric-val">${xPosts}</div><div class="report-metric-label">X Posts</div></div>
+        <div class="report-metric"><div class="report-metric-val">${fbPosts}</div><div class="report-metric-label">FB Posts</div></div>
+      </div>
+      ${imgPosts>0?`<div style="background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.15);border-radius:10px;padding:10px 14px;font-size:13px;color:#7c3aed;margin-bottom:14px">&#128444; <strong>${imgPosts}</strong> image posts this month</div>`:''}
+      <div class="section-label">Weekly Breakdown</div>
+      ${['Week 1','Week 2','Week 3','Week 4'].map((w,i)=>`
+        <div class="report-bar-row">
+          <div class="report-bar-label">${w}</div>
+          <div class="report-bar-track"><div class="report-bar-fill" style="width:${Math.round((weeklyData[i]/maxWeek)*100)}%"></div></div>
+          <div class="report-bar-val">${weeklyData[i]}</div>
+        </div>`).join('')}
+    </div>
+    <div class="report-card">
+      <div class="report-card-title">&#128221; Post History</div>
+      <div class="report-post-list">
+        ${monthPosts.length
+          ?monthPosts.slice().reverse().map(p=>`<div class="report-post-item">
+              ${p.hasImage?'&#128444; ':''}${p.text.substring(0,90)}${p.text.length>90?'...':''}
+              <div class="report-post-time">
+                <span style="color:${p.platform==='x'?'#000':'#1877f2'}">${p.platform==='x'?'X':'Facebook'}</span>
+                &middot; ${new Date(p.timestamp).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
+                &middot; ${new Date(p.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+              </div></div>`).join('')
+          :`<div style="text-align:center;padding:20px;font-size:13px;color:var(--muted)">No posts yet this month</div>`}
+      </div>
+    </div>
+    <div class="report-card">
+      <div class="report-card-title">&#127760; Platform Split</div>
+      <div class="report-bar-row">
+        <div class="report-bar-label">X Twitter</div>
+        <div class="report-bar-track"><div class="report-bar-fill" style="width:${monthPosts.length?Math.round((xPosts/monthPosts.length)*100):0}%;background:linear-gradient(90deg,#000,#444)"></div></div>
+        <div class="report-bar-val">${xPosts}</div>
+      </div>
+      <div class="report-bar-row">
+        <div class="report-bar-label">Facebook</div>
+        <div class="report-bar-track"><div class="report-bar-fill" style="width:${monthPosts.length?Math.round((fbPosts/monthPosts.length)*100):0}%;background:linear-gradient(90deg,#1877f2,#42a5f5)"></div></div>
+        <div class="report-bar-val">${fbPosts}</div>
+      </div>
+    </div>
+    <button class="download-btn" onclick="downloadReport('${client.name}','${currentMonth}')">
+      Download ${currentMonth} Report &mdash; ${client.name}
+    </button>`;
+}
+
+function switchReportClient(val){
+  selectedReportClient=parseInt(val);
+  renderReportsView(document.querySelector('#agency-dashboard .dash-body'));
+}
+
+function downloadReport(clientName,month){
+  const client=agencyClients[selectedReportClient];
+  const log=client.postLog||[];
+  const monthPosts=log.filter(p=>new Date(p.timestamp).getMonth()===new Date().getMonth());
+  const xPosts=monthPosts.filter(p=>p.platform==='x').length;
+  const fbPosts=monthPosts.filter(p=>p.platform==='fb').length;
+  const content=`AUTOPOST MONTHLY REPORT\nClient: ${clientName}\nMonth: ${month} ${new Date().getFullYear()}\nGenerated: ${new Date().toLocaleDateString()}\n${'─'.repeat(40)}\nSUMMARY\nTotal Posts: ${monthPosts.length}\nX (Twitter): ${xPosts}\nFacebook: ${fbPosts}\n${'─'.repeat(40)}\nPOST LOG\n${monthPosts.map(p=>`[${new Date(p.timestamp).toLocaleDateString()} ${new Date(p.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}] [${p.platform.toUpperCase()}]\n${p.text}`).join('\n\n')||'No posts this month.'}\n${'─'.repeat(40)}\nGenerated by AutoPost`;
+  const blob=new Blob([content],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`AutoPost_${clientName.replace(/\s+/g,'_')}_${month}.txt`;
+  a.click();URL.revokeObjectURL(url);
+  showToast('Report downloaded! ✓');
+}
+
+function renderAgencyAccountView(body){
+  if(!currentUser) return;
+  body.innerHTML=`
+    <div class="account-screen" style="padding:0">
+      <div class="account-card">
+        <div class="account-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
+        <div class="account-name">${currentUser.name}</div>
+        <div class="account-email">${currentUser.email}</div>
+      </div>
+      <div class="account-card">
+        <div class="section-label">Subscription</div>
+        <div class="account-row"><span class="account-row-label">Plan</span><span class="account-row-val">Social Media Manager</span></div>
+        <div class="account-row"><span class="account-row-label">Price</span><span class="account-row-val">&#8358;25,000/mo</span></div>
+        <div class="account-row"><span class="account-row-label">Status</span><span class="account-row-val" style="color:var(--green)">${currentUser.onTrial?`Free Trial (${currentUser.trialDaysLeft} days left)`:'Active'}</span></div>
+        <div class="account-row"><span class="account-row-label">Client Slots</span><span class="account-row-val">${agencyClients.length} / 10 used</span></div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Sign Out</button>
+    </div>`;
+}
+
+function logClientPost(i,postText){
+  const client=agencyClients[i];
+  if(!client.postLog) client.postLog=[];
+  const platforms=[];
+  if(client.platforms.x) platforms.push('x');
+  if(client.platforms.fb) platforms.push('fb');
+  platforms.forEach(platform=>{
+    client.postLog.push({text:postText,platform,timestamp:new Date().toISOString(),hasImage:false});
+  });
+  client.postsToday++;
+  client.totalPosts=(client.totalPosts||0)+1;
+  hideLoader();
+  const body=document.querySelector('#agency-dashboard .dash-body');
+  if(currentAgencyTab==='clients'){renderAgencyClients();updateAgencyStats();}
+  else if(currentAgencyTab==='calendar') renderCalendarView(body);
+  else if(currentAgencyTab==='reports') renderReportsView(body);
+  showToast(`Posted for ${client.name}!`);
+}
+
+async function generateForClient(i){
+  const client=agencyClients[i];
+  if(!client.platforms.x&&!client.platforms.fb){showToast('No platform connected');return;}
+  showLoader(`Generating post for ${client.name}...`);
+  setTimeout(async()=>{
+    try{
+      const response=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+          messages:[{role:'user',content:`Generate ONE viral social media post about "${client.niche}". Engaging, punchy, shareable. Add 3 hashtags. Max 280 chars. Return ONLY the post text.`}]})
+      });
+      const data=await response.json();
+      logClientPost(i,data.content?.[0]?.text?.trim()||generateFallbackPost(client.niche,true));
+    } catch(e){ logClientPost(i,generateFallbackPost(client.niche,true)); }
+  },2000);
+}
+
+// ── END OF AGENCY ─────────────────────────────────────────────────────
+
+function showLoader(msg){
+  document.getElementById('loader-text').textContent = msg||'Loading...';
+  document.getElementById('loader').classList.add('show');
+}
+function hideLoader(){document.getElementById('loader').classList.remove('show')}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
