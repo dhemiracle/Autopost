@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "crons": [
+    { "path": "/api/scheduler?action=run_image_schedule", "schedule": "0 8 * * *" },
+    { "path": "/api/scheduler?action=run_image_schedule", "schedule": "0 13 * * *" },
+    { "path": "/api/scheduler?action=run_image_schedule", "schedule": "0 18 * * *" },
+    { "path": "/api/scheduler?action=run_image_schedule", "schedule": "0 21 * * *" },
+    { "path": "/api/scheduler?action=run_video_schedule", "schedule": "0 9 * * 1,4" },
+    { "path": "/api/scheduler?action=process_scheduled", "schedule": "0 */1 * * *" }
+  ]
+}
